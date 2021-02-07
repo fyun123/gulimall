@@ -3,7 +3,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://192.168.0.109:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://192.168.1.11:3306/gulimall_pms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
@@ -22,3 +22,9 @@ server:
   port: 9001
 
 
+alibaba:
+  cloud:
+    access-key: xxxxxxxxxxx
+    secret-key: xxxxxxxxxx
+    oss:
+      endpoint: oss-cn-guangzhou.aliyuncs.com
