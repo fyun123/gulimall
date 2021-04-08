@@ -2,18 +2,40 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://192.168.1.16:3306/gulimall_wms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://10.138.213.16:3306/gulimall_wms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080
+#    alibaba:
+#      seata:
+#        tx-service-group: gulimall-ware-fescar-service-group
   application:
     name: gulimall-ware
-
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  rabbitmq:
+    host: 10.138.213.16
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+
+  zipkin:
+    base-url: http://localhost:9411
+    discovery-client-enabled: false # 关闭服务发现，否则spring-cloud会把zipkin的url当作服务名称
+    sender:
+      type: web # 设置使用http方式传输数据
+  sleuth:
+    sampler:
+      probability: 1 # 设置抽样采集率为100%，默认为0.1
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -21,4 +43,13 @@ mybatis-plus:
     db-config:
       id-type: auto
 server:
-  port: 9003
+  port: 9100
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+feign:
+  sentinel:
+    enabled: true

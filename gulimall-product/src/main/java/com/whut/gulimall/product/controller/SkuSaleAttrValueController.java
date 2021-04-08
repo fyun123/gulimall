@@ -1,15 +1,12 @@
 package com.whut.gulimall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.whut.gulimall.product.entity.SkuSaleAttrValueEntity;
 import com.whut.gulimall.product.service.SkuSaleAttrValueService;
@@ -30,6 +27,12 @@ import com.whut.common.utils.R;
 public class SkuSaleAttrValueController {
     @Autowired
     private SkuSaleAttrValueService skuSaleAttrValueService;
+
+    @GetMapping("/stringlist/{skuId}")
+    public List<String> getSkuSaleAttrValues(@PathVariable("skuId") Long skuId) {
+         List<String> skuSaleAttrValues = skuSaleAttrValueService.getSkuSaleAttrValues(skuId);
+         return skuSaleAttrValues;
+    }
 
     /**
      * 列表

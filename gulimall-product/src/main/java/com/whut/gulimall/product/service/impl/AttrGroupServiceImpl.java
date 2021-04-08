@@ -1,13 +1,15 @@
 package com.whut.gulimall.product.service.impl;
 
 import com.whut.gulimall.product.entity.AttrEntity;
+import com.whut.gulimall.product.service.AttrAttrgroupRelationService;
 import com.whut.gulimall.product.service.AttrService;
 import com.whut.gulimall.product.vo.AttrGroupWithAttrsVo;
+import com.whut.gulimall.product.vo.SkuItemVo;
+import com.whut.gulimall.product.vo.SpuItemBaseAttrVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +31,9 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
 
     @Autowired
     private AttrService attrService;
+
+    @Autowired
+    AttrAttrgroupRelationService attrAttrgroupRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -82,6 +87,14 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             return attrGroupWithAttrsVo;
         }).collect(Collectors.toList());
         return attrGroupWithAttrsVos;
+    }
+
+    @Override
+    public List<SpuItemBaseAttrVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId) {
+        // 1. 查询当前spu的所有属性分组
+        List<SpuItemBaseAttrVo> spuItemBaseAttrVos = this.baseMapper.getAttrGroupWithAttrsBySpuId(spuId,catalogId);
+
+        return spuItemBaseAttrVos;
     }
 
 

@@ -4,12 +4,14 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.whut.common.exception.BizCodeEnume;
+import com.whut.common.to.SocialUserTo;
+import com.whut.common.to.UserLoginTo;
+import com.whut.gulimall.member.exception.PhoneExistException;
+import com.whut.gulimall.member.exception.UsernameExistException;
+import com.whut.gulimall.member.vo.MemberRegisterVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.whut.gulimall.member.entity.MemberEntity;
 import com.whut.gulimall.member.service.MemberService;
@@ -30,6 +32,48 @@ import com.whut.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    /**
+     * 注册
+     */
+    @PostMapping("/register")
+    public R register(@RequestBody MemberRegisterVo vo){
+        try {
+            memberService.register(vo);
+        } catch (PhoneExistException e){
+            return R.error(BizCodeEnume.PHONE_EXIST_EXCEPTION.getCode(),BizCodeEnume.PHONE_EXIST_EXCEPTION.getMsg());
+        } catch (UsernameExistException e){
+            return R.error(BizCodeEnume.USER_EXIST_EXCEPTION.getCode(),BizCodeEnume.USER_EXIST_EXCEPTION.getMsg());
+        }
+
+        return R.ok();
+    }
+
+    /**
+     * 登陆
+     */
+    @PostMapping("/login")
+    public R login(@RequestBody UserLoginTo to){
+        MemberEntity memberEntity = memberService.login(to);
+        if (memberEntity != null){
+            return R.ok().setData(memberEntity);
+        }else {
+            return R.error(BizCodeEnume.LOGINACCOUNT_PASSWORD_INVALID_EXCEPTION.getCode(),BizCodeEnume.LOGINACCOUNT_PASSWORD_INVALID_EXCEPTION.getMsg());
+        }
+    }
+
+    /**
+     * 社交用户登陆
+     */
+    @PostMapping("/oauth/login")
+    public R socialLogin(@RequestBody SocialUserTo socialUserTo) throws Exception {
+        MemberEntity memberEntity = memberService.login(socialUserTo);
+        if (memberEntity != null){
+            return R.ok().setData(memberEntity);
+        }else {
+            return R.error(BizCodeEnume.LOGINACCOUNT_PASSWORD_INVALID_EXCEPTION.getCode(),BizCodeEnume.LOGINACCOUNT_PASSWORD_INVALID_EXCEPTION.getMsg());
+        }
+    }
 
     /**
      * 列表

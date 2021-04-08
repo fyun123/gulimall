@@ -2,15 +2,33 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://192.168.1.16:3306/gulimall_sms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://10.138.213.16:3306/gulimall_sms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
 
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080
+
+
   application:
     name: gulimall-coupon
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  zipkin:
+    base-url: http://localhost:9411
+    discovery-client-enabled: false
+    sender:
+      type: web # 设置使用http方式传输数据
+  sleuth:
+    sampler:
+      probability: 1 #采样值介于0-1之间，1则表示全部采样
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -19,4 +37,14 @@ mybatis-plus:
       id-type: auto
 
 server:
-  port: 9002
+  port: 9600
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+feign:
+  sentinel:
+    enabled: true

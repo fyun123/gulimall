@@ -13,6 +13,7 @@ import com.whut.gulimall.product.vo.AttrGroupRelationVo;
 import com.whut.gulimall.product.vo.AttrRespVo;
 import com.whut.gulimall.product.vo.AttrVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -122,6 +123,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         return pageUtils;
     }
 
+    @Cacheable(value = "attr",key = "'attrinfo:'+#root.args[0]")
     @Override
     public AttrRespVo getAttrInfo(Long attrId) {
         AttrRespVo attrRespVo = new AttrRespVo();
@@ -245,6 +247,12 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         IPage<AttrEntity> page = this.page(new Query<AttrEntity>().getPage(params), queryWrapper);
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<Long> selectSearchAttrs(List<Long> attrIds) {
+        // select attr_id from `pms_attr` where attr_id in () and search_type=1
+        return this.baseMapper.selectSearchAttrIds(attrIds);
     }
 
 }

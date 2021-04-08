@@ -138,7 +138,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
                 detailEntity.setStatus(item.getStatus());
             } else {
                 detailEntity.setStatus(WareConstant.PurchaseDetailStatusEnum.FINISH.getCode());
-                //采购成功
+                // 3. 采购成功的进行入库
                 PurchaseDetailEntity detailEntityById = purchaseDetailService.getById(item.getItemId());
                 wareSkuService.addStock(detailEntityById.getSkuId(),detailEntityById.getWareId(),detailEntityById.getSkuNum());
             }
@@ -152,7 +152,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
         purchaseEntity.setStatus(flag?WareConstant.PurchaseStatusEnum.FINISH.getCode():WareConstant.PurchaseStatusEnum.HASERROR.getCode());
         purchaseEntity.setUpdateTime(new Date());
         this.updateById(purchaseEntity);
-        // 3. 采购成功的进行入库
+
 
     }
 

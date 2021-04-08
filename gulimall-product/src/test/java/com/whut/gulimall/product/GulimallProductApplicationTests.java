@@ -4,13 +4,21 @@ package com.whut.gulimall.product;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.whut.gulimall.product.dao.AttrGroupDao;
+import com.whut.gulimall.product.dao.SkuSaleAttrValueDao;
 import com.whut.gulimall.product.entity.BrandEntity;
 import com.whut.gulimall.product.service.BrandService;
 import com.whut.gulimall.product.service.CategoryService;
+import com.whut.gulimall.product.vo.SkuItemSaleAttrVo;
+import com.whut.gulimall.product.vo.SkuItemVo;
+import com.whut.gulimall.product.vo.SpuItemBaseAttrVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import javax.annotation.Resource;
 import java.io.FileInputStream;
@@ -31,6 +39,37 @@ class GulimallProductApplicationTests {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
+
+    @Resource
+     AttrGroupDao attrGroupDao;
+    @Resource
+    SkuSaleAttrValueDao skuSaleAttrValueDao;
+
+    @Test
+    public void test(){
+        List<SpuItemBaseAttrVo> attrGroupWithAttrsBySpuId = attrGroupDao.getAttrGroupWithAttrsBySpuId(2L, 225L);
+        List<SkuItemSaleAttrVo> saleAttrsBySpuId = skuSaleAttrValueDao.getSaleAttrsBySpuId(2L);
+        System.out.println(saleAttrsBySpuId);
+    }
+
+    @Test
+    public void testRedisson(){
+        System.out.println(redissonClient);
+    }
+
+    @Test
+    public void testRedis(){
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        ops.set("hello","你好");
+        String hello = ops.get("hello");
+        System.out.println(hello);
+    }
 
     @Test
     public void findParent(){

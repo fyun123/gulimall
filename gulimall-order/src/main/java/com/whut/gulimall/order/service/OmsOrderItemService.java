@@ -3,6 +3,7 @@ package com.whut.gulimall.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.whut.common.utils.PageUtils;
 import com.whut.gulimall.order.entity.OmsOrderItemEntity;
+import com.whut.gulimall.order.vo.OrderItemVo;
 
 import java.util.Map;
 
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface OmsOrderItemService extends IService<OmsOrderItemEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    OrderItemVo getItemByOrderSn(String orderSn);
 }
 

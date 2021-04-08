@@ -2,11 +2,72 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://192.168.2.5:3306/gulimall_oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://10.138.213.16:3306/gulimall_oms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: 10.138.213.16
+    port: 5672
+    virtual-host: /
+    publisher-confirm-type: correlated  # 开启发送端确认
+    publisher-returns: true # 开启发送端消息抵达队列的确认
+    template:
+      mandatory: true # 只有抵达队列，以异步发送优先回调returnCallback
+    listener:
+      simple:
+        acknowledge-mode: manual # 手动ack消息
+  application:
+    name: gulimall-order
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8080
+#    alibaba:
+#      seata:
+#        tx-service-group: gulimall-order-fescar-service-group
+  thymeleaf:
+    cache: false
+  redis:
+    host: 10.138.213.16
+    port: 6379
+  session:
+    store-type: redis
+  mvc:
+    format:
+      date: yyyy-MM-dd HH:mm:ss
+
+  zipkin:
+    base-url: http://localhost:9411
+    discovery-client-enabled: false
+    sender:
+      type: web # 设置使用http方式传输数据
+  sleuth:
+    sampler:
+      probability: 1
+
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+server:
+  port: 9400
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+feign:
+  sentinel:
+    enabled: true
+logging:
+  level:
+    com.whut.gulimall: error

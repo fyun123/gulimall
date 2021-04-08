@@ -1,15 +1,18 @@
 package com.whut.gulimall.ware.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+
+import com.whut.common.exception.BizCodeEnume;
+import com.whut.common.exception.NoStockException;
+import com.whut.common.to.SkuHasStockTo;
+import com.whut.gulimall.ware.vo.LockStockResult;
+import com.whut.gulimall.ware.vo.WareSkuLockVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.whut.gulimall.ware.entity.WareSkuEntity;
 import com.whut.gulimall.ware.service.WareSkuService;
@@ -30,6 +33,28 @@ import com.whut.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    @PostMapping("/lock/order")
+    public R orderLockStock(@RequestBody WareSkuLockVo vo){
+        try{
+            List<Long> failSkuIds = wareSkuService.orderLockStock(vo);
+            return R.ok();
+        }catch (NoStockException e){
+            return R.error(BizCodeEnume.NO_STOCK_EXCEPTION.getCode(),BizCodeEnume.NO_STOCK_EXCEPTION.getMsg()).put("skuIds",e.getSkuIds());
+        }
+
+
+    }
+
+    /**
+     * 查询sku是否有库存
+     */
+    @PostMapping("/hasstock")
+    public R getSkuHasStock(@RequestBody List<Long> skuIds){
+        List<SkuHasStockTo> vos = wareSkuService.getSkuHasStock(skuIds);
+
+        return R.ok().setData(vos);
+    }
 
     /**
      * 列表
