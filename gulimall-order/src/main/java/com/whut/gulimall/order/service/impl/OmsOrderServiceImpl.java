@@ -125,8 +125,6 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
                 orderConfirmVo.setStocks(stocks);
             }
         },executor);
-
-
         // 3. 查询用户积分
         Integer integration = memberResVo.getIntegration();
         orderConfirmVo.setIntegration(integration);
@@ -138,7 +136,6 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
         CompletableFuture.allOf(getAddressFuture,getCartFuture).get();
         return orderConfirmVo;
     }
-
 //    @GlobalTransactional
     @Transactional
     @Override

@@ -80,10 +80,6 @@ public class CartServiceImpl implements CartService {
             cartOps.put(skuId.toString(), JSON.toJSONString(cartItemOld));
             return cartItemOld;
         }
-
-
-
-
     }
 
     @Override

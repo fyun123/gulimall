@@ -42,5 +42,4 @@ public class SeckillController {
         model.addAttribute("orderSn",orderSn);
         return "success";
     }
-
 }

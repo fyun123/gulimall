@@ -112,12 +112,10 @@ public class MallSearchServiceImpl implements MallSearchService {
                 boolQuery.filter(nestedQuery);
             }
         }
-
         // 1.2.4 库存
         if (param.getHasStock() != null){
             boolQuery.filter(QueryBuilders.termQuery("hasStock", param.getHasStock() == 1));
         }
-
         // 1.2.5 价格区间
         /**
          *  {
