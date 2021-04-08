@@ -31,8 +31,6 @@ class GulimallThirdPartyApplicationTests {
     private OSSClient ossClient;
 
 
-
-
     @Test
     public void testUpload() throws FileNotFoundException {
         // 上传文件流。
